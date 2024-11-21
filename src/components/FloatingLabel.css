@@ -1,0 +1,136 @@
+/* Basic styles for form group */
+.form-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+/* Floating input field styles */
+.floating-input {
+  padding: 1.25rem 0.5rem 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color 0.3s;
+  width: 100%;
+}
+
+.floating-input:focus {
+  border-color: #007bff; /* Blue border on focus */
+  box-shadow: none;
+  outline: none;
+}
+
+.floating-input:focus + .floating-label,
+.floating-input:not(:placeholder-shown) + .floating-label {
+  top: -0.5rem;
+  left: 1rem; /* Adjusted to move label slightly right */
+  font-size: 0.75rem;
+  color: #007bff; /* Blue color when focused or input has value */
+}
+
+.floating-label {
+  position: absolute;
+  left: 1rem; /* Adjusted to move label slightly to the right */
+  top: 1rem;  /* Vertical position within the input */
+  transition: 0.2s ease all;
+  color: #999; /* Default label color */
+  pointer-events: none;
+  background-color: white;
+  padding: 0 0.25rem;
+}
+
+/* Select element styles */
+.select-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.select-control {
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  padding: 0.75rem 1rem;
+  transition: border-color 0.3s;
+  width: 100%;
+  appearance: none; /* Remove default select styling */
+  background-color: white;
+}
+
+.select-control:focus {
+  border-color: #007bff; /* Blue border on focus */
+  box-shadow: none;
+  outline: none;
+}
+
+.select-control:focus + .select-label,
+.select-control:valid + .select-label { 
+  top: -0.5rem;
+  left: 1rem; /* Adjusted for the select input */
+  font-size: 0.75rem;
+}
+
+.select-label {
+  position: absolute;
+  left: 1rem; /* Adjusted for the select input */
+  top: 0.75rem;
+  transition: 0.2s ease all;
+  color: black; /* Always black label color */
+  pointer-events: none;
+  background-color: white;
+  padding: 0 0.25rem;
+}
+
+/* File input styles */
+.file-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.file-control {
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  padding: 1.25rem 0.5rem 0.5rem;
+  transition: border-color 0.3s;
+  width: 100%;
+  background-color: white;
+  appearance: none; /* Remove default file input styling */
+}
+
+.file-control:focus {
+  border-color: #007bff; /* Blue border on focus */
+  box-shadow: none;
+  outline: none;
+}
+
+.file-control:focus + .file-label,
+.file-control:not(:placeholder-shown) + .file-label {
+  top: -0.5rem;
+  left: 1rem; /* Adjusted for the file input */
+  font-size: 0.75rem;
+}
+
+.file-label {
+  position: absolute;
+  left: 1rem; /* Adjusted for the file input */
+  top: 0.75rem;
+  transition: 0.2s ease all;
+  color: black; /* Always black label color */
+  pointer-events: none;
+  background-color: white;
+  padding: 0 0.25rem;
+}
+
+/* Optional: Remove the default arrow for select inputs */
+.select-control::-ms-expand {
+  display: none;
+}
+
+/* Hide spinner buttons in input[type="number"] */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
