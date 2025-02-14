@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import supabase from "../../utils/supabaseClient";
-import { useNavigate } from "react-router-dom";
 import Toast from "../Toast";
 
 const AuthContext = createContext();
@@ -10,7 +9,6 @@ const AuthProvider = ({ children }) => {
   const [userBusinessData, setUserBusinessData] = useState(null);
   const [toast, setToast] = useState({ show: false, type: "", message: "" });
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const loadSession = async () => {
@@ -29,39 +27,32 @@ const AuthProvider = ({ children }) => {
         setLoading(false);
       }
     };
-  
+
     loadSession();
-  
+
     const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+      setLoading(true); // Ensure loading is set before updates
       if (session?.user) {
         setUser(session.user);
-        getUserBusinessData(session.user.id);
+        getUserBusinessData(session.user.id).finally(() => setLoading(false));
       } else {
         setUser(null);
         setUserBusinessData(null);
+        setLoading(false);
       }
     });
-  
+
     return () => {
       listener?.subscription.unsubscribe();
     };
   }, []);
-  
+
   const getUserBusinessData = async (userId) => {
-    if (userId) {
-      const { data, error: businessError } = await supabase
-        .from("businesses")
-        .select("*")
-        .eq("owner_id",userId)
-        .single();
-      if (businessError) throw businessError;
-
-      setUserBusinessData(data);
-    } else {
-      setUserBusinessData(null);
-    }
-
-  }
+    if (!userId) return setUserBusinessData(null);
+    const { data, error } = await supabase.from("businesses").select("*").eq("owner_id", userId).single();
+    if (error) console.error("Error fetching business data:", error.message);
+    setUserBusinessData(data);
+  };
 
   const employeeSignIn = async (email, password) => {
     const { data, error } = await supabase
@@ -69,28 +60,20 @@ const AuthProvider = ({ children }) => {
       .select("request_status, business_id")
       .eq("email", email)
       .single();
+    
     if (data) {
       const { request_status, business_id } = data;
-
       if (request_status === "pending" || request_status === "rejected") {
-        setToast({
-          show: true,
-          type: "warning",
-          message: `Your request for business ${business_id} is ${request_status}.`,
-        });
+        setToast({ show: true, type: "warning", message: `Your request for business ${business_id} is ${request_status}.` });
         return;
       }
-
       if (request_status === "approved") {
-        navigate("/create-password", { state: { email } });
+        window.location.href = "/create-password"; // Fix navigation issue
         return;
       }
     }
 
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
     if (signInError) {
       setToast({ show: true, type: "danger", message: signInError.message });
     }
@@ -101,7 +84,7 @@ const AuthProvider = ({ children }) => {
     if (error) {
       setToast({ show: true, type: "danger", message: error.message });
     } else {
-      navigate("/");
+      window.location.href = "/"; // Fix navigation issue
     }
   };
 
@@ -116,7 +99,7 @@ const AuthProvider = ({ children }) => {
     if (error) {
       setToast({ show: true, type: "danger", message: error.message });
     } else {
-      navigate("/");
+      window.location.href = "/"; // Fix navigation issue
     }
   };
 
@@ -125,6 +108,7 @@ const AuthProvider = ({ children }) => {
     setUser(null);
     setUserBusinessData(null);
     setToast({ show: true, type: "info", message: "Successfully signed out!" });
+    window.location.href = "/rolePage"; // Redirect on sign out
   };
 
   const handleToastClose = () => {
@@ -132,16 +116,9 @@ const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider
-      value={{ user, loading, userBusinessData, signIn, businessSignUp, signOut }}
-    >
+    <AuthContext.Provider value={{ user, loading, userBusinessData, signIn, businessSignUp, signOut }}>
       {children}
-      <Toast
-        type={toast.type}
-        message={toast.message}
-        show={toast.show}
-        onClose={handleToastClose}
-      />
+      <Toast type={toast.type} message={toast.message} show={toast.show} onClose={handleToastClose} />
     </AuthContext.Provider>
   );
 };

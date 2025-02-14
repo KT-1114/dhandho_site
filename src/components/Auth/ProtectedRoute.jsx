@@ -11,7 +11,7 @@ const ProtectedRoute = ({ children }) => {
     // Show a loading spinner while the authentication state is loading
     return (
       <div className="d-flex justify-content-center align-items-center vh-100">
-        <div className="spinner-border text-" role="status">
+        <div className="spinner-border" role="status">
           <span className="visually-hidden"></span>
         </div>
       </div>
