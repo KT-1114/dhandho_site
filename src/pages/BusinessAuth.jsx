@@ -4,6 +4,8 @@ import logo from "../assets/logo_white.png";
 import Toast from "../components/Toast";
 import { useAuth } from "../components/Auth/AuthProvider";
 import { Campaign } from "@mui/icons-material";
+import '../styles/AuthStyles.css';
+
 
 const BusinessAuth = () => {
   const [step, setStep] = useState(1);
