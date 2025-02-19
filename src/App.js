@@ -5,8 +5,9 @@ import { ConnectWithoutContact, ViewList } from '@mui/icons-material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import LayersIcon from '@mui/icons-material/Layers';
 import SettingsIcon from '@mui/icons-material/Settings';
-import logo from './assets/logo.png';  // Adjust the path based on your project structure
+import logo from './assets/logo.png';
 import { extendTheme } from "@mui/material";
+import { useAuth } from "./components/Auth/AuthProvider";
 
 const NAVIGATION = [
   { kind: 'header', title: 'Main items' },
@@ -93,12 +94,16 @@ const branding = {
   homeUrl: '/', // Ensure home URL is set correctly
 };
 
+
 export default function App() {
+  const {session, authentication} = useAuth();
   return (
     <AppProvider
       navigation={NAVIGATION}
       branding={branding}
       theme={dhandhoTheme}
+      session={session}
+      authentication={authentication}
     >
       <Outlet />
     </AppProvider>
