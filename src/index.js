@@ -17,6 +17,7 @@ import BusinessAuth from './pages/BusinessAuth';
 import EmployeeAuth from './pages/EmployeeAuth';
 import PageNotFound from './pages/NotFound';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import PlaceOrder from './pages/PlaceOrder';
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,7 @@ const router = createBrowserRouter([
         children: [
           { path: '/', element: <Home /> },
           { path: '/orders', element: <ProtectedRoute><Orders /></ProtectedRoute> },
+          { path: '/place-order', element: <ProtectedRoute><PlaceOrder /></ProtectedRoute> },
           { path: '/products', element: <ProtectedRoute><Products /></ProtectedRoute> },
           { path: '/connections', element: <ProtectedRoute><Connections /></ProtectedRoute> },
           { path: '/settings', element: <ProtectedRoute><Settings /></ProtectedRoute> },
